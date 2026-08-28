@@ -5,19 +5,33 @@ A minimal macOS menu bar utility for better privacy when working in public: it d
 Focusbeam pairs well with privacy screens and further reduces what's visible to someone sitting next to you on an airplane or peeking over your shoulder.
 
 Intentionally simple:
-- Single Swift file, AppKit only, no dependencies.
+- AppKit only, no dependencies.
 - No Accessibility, Screen Recording, or any other permissions required.
 
 ## Install
 
-### Homebrew (coming)
+### Homebrew
+
+```sh
+brew tap v4fs/focusbeam
+brew install focusbeam
+```
+
+Then link the app into `~/Applications` so Spotlight and Launchpad can find it:
+
+```sh
+ln -sf "$(brew --prefix focusbeam)/Focusbeam.app" ~/Applications/
+```
+
+Launch it from Spotlight like any other app (or run `focusbeam` in the
+terminal), and quit it from its menu bar icon.
 
 ### From source
 
 ```sh
 git clone https://github.com/v4fs/focusbeam && cd focusbeam
-swift build -c release
-.build/release/focusbeam &
+make app
+open Focusbeam.app
 ```
 
 ## Usage

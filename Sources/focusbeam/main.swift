@@ -94,8 +94,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     func applicationDidFinishLaunching(_ notification: Notification) {
         statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         if let button = statusItem.button {
-            button.image = NSImage(systemSymbolName: "flashlight.off.fill",
-                                   accessibilityDescription: "focusbeam")
+            button.image = statusImage(active: false)
             button.target = self
             button.action = #selector(statusClicked)
             button.sendAction(on: [.leftMouseUp, .rightMouseUp])
@@ -196,9 +195,34 @@ final class AppDelegate: NSObject, NSApplicationDelegate, NSMenuDelegate {
     private func toggle() {
         isActive ? hideOverlay() : showOverlay()
         toggleMenuItem.state = isActive ? .on : .off
-        statusItem.button?.image = NSImage(
-            systemSymbolName: isActive ? "flashlight.on.fill" : "flashlight.off.fill",
-            accessibilityDescription: "focusbeam")
+        statusItem.button?.image = statusImage(active: isActive)
+    }
+
+    // Miniature of the app icon: a square with a circle in the top-left.
+    // Active: filled square with the circle knocked out; inactive: inverted.
+    // Template image, so "black" follows the menu bar appearance.
+    private func statusImage(active: Bool) -> NSImage {
+        let image = NSImage(size: NSSize(width: 18, height: 18), flipped: false) { rect in
+            let square = NSBezierPath(roundedRect: rect.insetBy(dx: 1.5, dy: 1.5),
+                                      xRadius: 3, yRadius: 3)
+            let r: CGFloat = 3
+            let circle = NSBezierPath(ovalIn: NSRect(x: 5.5 - r, y: 12.5 - r,
+                                                     width: 2 * r, height: 2 * r))
+            NSColor.black.set()
+            if active {
+                square.lineWidth = 1.5
+                square.stroke()
+                circle.fill()
+            } else {
+                square.append(circle)
+                square.windingRule = .evenOdd
+                square.fill()
+            }
+            return true
+        }
+        image.isTemplate = true
+        image.accessibilityDescription = "focusbeam"
+        return image
     }
 
     private func showOverlay() {
