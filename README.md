@@ -13,7 +13,8 @@ Intentionally simple:
 ### Homebrew
 
 ```sh
-brew tap v4fs/focusbeam
+brew tap v4fs/tap
+brew trust --formula v4fs/tap/focusbeam
 brew install focusbeam
 ```
 
@@ -51,3 +52,4 @@ so you can always reach the toggle.
 ## Limitations
 
 - The overlay shows up in screenshots and screen sharing
+- The overlay disappears when switching between desktops 
